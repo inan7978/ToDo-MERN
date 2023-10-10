@@ -44,6 +44,7 @@ app.delete(`/:id`, async (req, res) => {
   const result = await collection.deleteOne({
     _id: new mongodb.ObjectId(`${req.params.id}`),
   });
+  res.send("Done");
 });
 
 app.patch("/:id", async (req, res) => {

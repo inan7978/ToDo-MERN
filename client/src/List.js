@@ -3,7 +3,6 @@ import "./List.css";
 
 function List({ getRemaining }) {
   const [list, setList] = useState([]);
-
   const [doneList, setDoneList] = useState([]);
   const [newTask, setNewTask] = useState("");
 
@@ -18,6 +17,7 @@ function List({ getRemaining }) {
     getRemaining(counter);
   });
 
+  ////////////////////////////////////// This area fetches the Tasks
   useEffect(() => {
     async function getRecords() {
       const response = await fetch(`http://localhost:3002/`);
@@ -37,6 +37,7 @@ function List({ getRemaining }) {
     return;
   }, [list.length]);
 
+  /////////////////////////////////// This is the handler for creating a task
   async function handleSubmit(e) {
     e.preventDefault();
     if (newTask.length > 0) {
@@ -53,15 +54,26 @@ function List({ getRemaining }) {
       });
     }
     setNewTask("");
+    if (list.length > 1) {
+      setList([]);
+    } else {
+      setList(["testing", "this"]);
+    }
   }
-
+  //////////////////////////////////// This is the handler for when you delete a task
   async function handleDelete(val) {
-    console.log("Request delete for: " + val);
-    const response = await fetch(`http://localhost:3002/${val}`, {
+    console.log("Request delete for: " + val._id);
+    const res = await fetch(`http://localhost:3002/${val._id}`, {
       method: "DELETE",
     });
+    const result = list.filter((item) => {
+      return item._id !== val._id;
+    });
+    if (res) {
+      setList([]);
+    }
   }
-
+  //////////////////////////////////// This is the handler for when you check a task off
   async function handleComplete(val) {
     setDoneList([...doneList], val);
 
@@ -81,7 +93,15 @@ function List({ getRemaining }) {
         "Content-Type": "application/json",
       },
     });
+    if (list.length > 1) {
+      setList([]);
+    } else {
+      setList(["testing", "this"]);
+    }
   }
+
+  console.log(list);
+  ////////////////////////////////////////////// This maps the current list
   const mappedItems = list.map((item) => {
     return (
       <li
@@ -107,7 +127,7 @@ function List({ getRemaining }) {
           <button
             className="del-btn"
             onClick={() => {
-              handleDelete(item._id);
+              handleDelete(item);
             }}
           >
             X
@@ -116,7 +136,7 @@ function List({ getRemaining }) {
       </li>
     );
   });
-
+  ////////////////////////////////////// This is what renders
   return (
     <>
       <form onSubmit={handleSubmit} className="new-task-field">
