@@ -93,10 +93,13 @@ function List({ getRemaining }) {
         "Content-Type": "application/json",
       },
     });
-    if (list.length > 1) {
-      setList([]);
-    } else {
-      setList(["testing", "this"]);
+
+    if (response) {
+      if (list.length > 1) {
+        setList([]);
+      } else {
+        setList(["testing", "this"]);
+      }
     }
   }
 
