@@ -1,4 +1,4 @@
-## ToDo-MERN
+# ToDo-MERN
 
 - This is the ToDo app that has been recreated with the full MERN stack.
 - I used React.js for the front-end (client), MongoDB for database, and Express.js to handle the communication between the two using REST API.
